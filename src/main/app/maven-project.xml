@@ -3,7 +3,6 @@
 <mule xmlns:json="http://www.mulesoft.org/schema/mule/json"
 	 xmlns:db="http://www.mulesoft.org/schema/mule/db"
 	 xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	 xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
 	 xmlns="http://www.mulesoft.org/schema/mule/core"
 	 xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	 xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.7.0"
@@ -12,7 +11,6 @@
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
-http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
 	
 	<http:listener-config name="HTTPListener8091" host="0.0.0.0" port="8091" doc:name="HTTP Listener Configuration" />
@@ -22,8 +20,6 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 	</spring:beans>
 	
 	<db:derby-config name="Derby_Configuration" url="jdbc:derby:memory:muleEmbeddedDB;create=true" doc:name="Derby Configuration" />
-	
-	<jms:activemq-connector name="Active_MQ" brokerURL="vm://localhost" validateConnections="true" doc:name="Active MQ" />
 	
 	<flow name="sayHello">
 		<http:listener config-ref="HTTPListener8091" path="/hello" allowedMethods="GET" doc:name="HTTP" />
@@ -37,12 +33,6 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		</db:select>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
-		<jms:outbound-endpoint queue="log" connector-ref="Active_MQ" doc:name="Produce to log queue" />
-	</flow>
-
-	<flow name="LogDBResults">
-		<jms:inbound-endpoint queue="log" connector-ref="Active_MQ" doc:name="Consume from log queue" />
-		<logger message="#[payload]" level="INFO" doc:name="Logger" />
 	</flow>
 	
 </mule>

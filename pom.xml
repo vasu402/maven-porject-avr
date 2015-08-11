@@ -133,12 +133,6 @@
 			<version>10.11.1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-all</artifactId>
-			<version>5.11.2</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.mule.tests</groupId>
 			<artifactId>mule-tests-functional</artifactId>
 			<version>${mule.version}</version>
